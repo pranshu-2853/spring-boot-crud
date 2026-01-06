@@ -1,0 +1,26 @@
+
+services:
+  db:
+    container_name: postgres-pranshu
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: pranshu
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: my_first_db
+      PGDATA: /data/postgres
+      TZ: "Asia/Kolkata"
+
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:

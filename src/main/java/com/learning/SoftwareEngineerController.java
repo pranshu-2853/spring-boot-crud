@@ -1,6 +1,9 @@
 package com.learning;
 
 import org.springframework.web.bind.annotation.*;
+import com.learning.dto.SoftwareEngineerRequestDto;
+import com.learning.dto.SoftwareEngineerResponseDto;
+
 
 import java.util.List;
 
@@ -15,19 +18,26 @@ public class SoftwareEngineerController {
     }
 
     @GetMapping
-    public List<SoftwareEngineer> getSoftwareEngineers() {
+    public List<SoftwareEngineerResponseDto> getSoftwareEngineers() {
         return softwareEngineerService.getSoftwareEngineers();
     }
 
-    @GetMapping("{id}")
-    public SoftwareEngineer getSoftwareEngineersById(@PathVariable Integer id) {
+
+    @GetMapping("/{id}")
+    public SoftwareEngineerResponseDto getSoftwareEngineerById(
+            @PathVariable Integer id) {
+
         return softwareEngineerService.getSoftwareEngineersById(id);
     }
 
+
     @PostMapping
-    public void addSoftwareEngineer(@RequestBody SoftwareEngineer softwareEngineer) {
-        softwareEngineerService.insertSoftwareEngineer(softwareEngineer);
+    public SoftwareEngineerResponseDto addSoftwareEngineer(
+            @RequestBody SoftwareEngineerRequestDto dto) {
+
+        return softwareEngineerService.insertSoftwareEngineer(dto);
     }
+
 
     @DeleteMapping("/{id}")
     public void deleteSoftwareEngineerById(@PathVariable Integer id) {
@@ -35,7 +45,11 @@ public class SoftwareEngineerController {
     }
 
     @PutMapping("/{id}")
-    public void updateSoftwareEngineerById(@PathVariable Integer id, @RequestBody SoftwareEngineer softwareEngineer) {
-        softwareEngineerService.updateSoftwareEngineerById(id,softwareEngineer);
+    public SoftwareEngineerResponseDto updateSoftwareEngineerById(
+            @PathVariable Integer id,
+            @RequestBody SoftwareEngineerRequestDto dto) {
+
+        return softwareEngineerService.updateSoftwareEngineerById(id, dto);
     }
+
 }

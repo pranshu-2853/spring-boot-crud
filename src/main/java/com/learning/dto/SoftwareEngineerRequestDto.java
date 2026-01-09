@@ -1,9 +1,14 @@
 package com.learning.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class SoftwareEngineerRequestDto {
 
     private String name;
     private String techStack;
+
+    @NotBlank
+    private String title;
 
     public SoftwareEngineerRequestDto() {
     }

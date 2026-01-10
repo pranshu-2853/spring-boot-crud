@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/api/v1/software-engineer/2
+DELETE http://localhost:8080/api/v1/software-engineer/7
 
 ###
 POST http://localhost:8080/api/v1/software-engineer
@@ -85,3 +85,22 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/api/v1/software-engineer/999
+
+
+###
+POST http://localhost:8080/api/v1/software-engineer
+Content-Type: application/json
+
+{
+  "name": "Pranshu",
+  "techStack": "Java"
+}
+
+###
+POST http://localhost:8080/api/v1/software-engineer
+Content-Type: application/json
+
+{
+  "name": "Pranshu",
+  "techStack": "JS"
+}

@@ -1,5 +1,7 @@
 package com.learning;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.learning.dto.SoftwareEngineerRequestDto;
 import com.learning.dto.SoftwareEngineerResponseDto;
@@ -32,17 +34,26 @@ public class SoftwareEngineerController {
 
 
     @PostMapping
-    public SoftwareEngineerResponseDto addSoftwareEngineer(
+    public ResponseEntity<SoftwareEngineerResponseDto> addSoftwareEngineer(
             @Valid @RequestBody SoftwareEngineerRequestDto dto) {
 
-        return softwareEngineerService.insertSoftwareEngineer(dto);
+        SoftwareEngineerResponseDto response =
+                softwareEngineerService.insertSoftwareEngineer(dto);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
+
+
 
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSoftwareEngineerById(@PathVariable Integer id) {
         softwareEngineerService.deleteSoftwareEngineerById(id);
     }
+
 
     @PutMapping("/{id}")
     public SoftwareEngineerResponseDto updateSoftwareEngineerById(

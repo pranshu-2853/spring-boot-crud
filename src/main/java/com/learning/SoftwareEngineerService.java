@@ -1,5 +1,6 @@
 package com.learning;
 
+import com.learning.exception.DuplicateResourceException;
 import com.learning.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import com.learning.dto.SoftwareEngineerRequestDto;
@@ -48,6 +49,16 @@ public class SoftwareEngineerService {
     @Transactional
     public SoftwareEngineerResponseDto insertSoftwareEngineer(
             SoftwareEngineerRequestDto dto) {
+
+        if (softwareEngineerRepository.existsByNameAndTechStack(
+                dto.getName(), dto.getTechStack())) {
+
+            throw new DuplicateResourceException(
+                    "SoftwareEngineer already exists with name " +
+                            dto.getName() + " and techStack " + dto.getTechStack()
+            );
+        }
+
 
         SoftwareEngineer entity = toEntity(dto);
         SoftwareEngineer saved = softwareEngineerRepository.save(entity);

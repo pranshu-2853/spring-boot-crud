@@ -1,9 +1,10 @@
 package com.learning;
 
+import com.learning.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import com.learning.dto.SoftwareEngineerRequestDto;
 import com.learning.dto.SoftwareEngineerResponseDto;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,64 +28,80 @@ public class SoftwareEngineerService {
     }
 
 
-    public SoftwareEngineerResponseDto insertSoftwareEngineer(
-            SoftwareEngineerRequestDto dto) {
-
+    private SoftwareEngineer toEntity(SoftwareEngineerRequestDto dto) {
         SoftwareEngineer entity = new SoftwareEngineer();
         entity.setName(dto.getName());
         entity.setTechStack(dto.getTechStack());
+        return entity;
+    }
 
-        SoftwareEngineer saved = softwareEngineerRepository.save(entity);
-
+    private SoftwareEngineerResponseDto toResponseDto(SoftwareEngineer entity) {
         return new SoftwareEngineerResponseDto(
-                saved.getId(),
-                saved.getName(),
-                saved.getTechStack()
+                entity.getId(),
+                entity.getName(),
+                entity.getTechStack()
         );
+    }
+
+
+
+    @Transactional
+    public SoftwareEngineerResponseDto insertSoftwareEngineer(
+            SoftwareEngineerRequestDto dto) {
+
+        SoftwareEngineer entity = toEntity(dto);
+        SoftwareEngineer saved = softwareEngineerRepository.save(entity);
+        return toResponseDto(saved);
     }
 
 
     public SoftwareEngineerResponseDto getSoftwareEngineersById(Integer id) {
 
-        SoftwareEngineer se = softwareEngineerRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException(id + " not found"));
+        SoftwareEngineer entity = softwareEngineerRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "SoftwareEngineer not found with id " + id
+                        )
+                );
 
-        return new SoftwareEngineerResponseDto(
-                se.getId(),
-                se.getName(),
-                se.getTechStack()
-        );
+        return toResponseDto(entity);
     }
 
 
+
+    @Transactional
     public void deleteSoftwareEngineerById(Integer id) {
 
-        boolean exists = softwareEngineerRepository.existsById(id);
-        if (!exists) {
-            throw new IllegalStateException(id + " not found");
-        }
+        SoftwareEngineer entity = softwareEngineerRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "SoftwareEngineer not found with id " + id
+                        )
+                );
 
-        softwareEngineerRepository.deleteById(id);
+        softwareEngineerRepository.delete(entity);
     }
 
 
+
+    @Transactional
     public SoftwareEngineerResponseDto updateSoftwareEngineerById(
             Integer id,
             SoftwareEngineerRequestDto dto) {
 
-        SoftwareEngineer existing = softwareEngineerRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException(id + " not found"));
+        SoftwareEngineer entity = softwareEngineerRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "SoftwareEngineer not found with id " + id
+                        )
+                );
 
-        existing.setName(dto.getName());
-        existing.setTechStack(dto.getTechStack());
+        entity.setName(dto.getName());
+        entity.setTechStack(dto.getTechStack());
 
-        SoftwareEngineer saved = softwareEngineerRepository.save(existing);
-
-        return new SoftwareEngineerResponseDto(
-                saved.getId(),
-                saved.getName(),
-                saved.getTechStack()
-        );
+        SoftwareEngineer updated = softwareEngineerRepository.save(entity);
+        return toResponseDto(updated);
     }
+
 
 }

@@ -10,9 +10,6 @@ public class SoftwareEngineerRequestDto {
     @NotBlank
     private String techStack;
 
-
-
-
     public SoftwareEngineerRequestDto() {
     }
 

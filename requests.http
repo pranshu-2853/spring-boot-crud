@@ -68,3 +68,20 @@ Content-Type: application/json
   "name": "Pranshu",
   "techStack": "Java"
 }
+
+
+###
+GET http://localhost:8080/api/v1/software-engineer/999
+
+
+###
+PUT http://localhost:8080/api/v1/software-engineer/999
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "techStack": "Java"
+}
+
+###
+DELETE http://localhost:8080/api/v1/software-engineer/999

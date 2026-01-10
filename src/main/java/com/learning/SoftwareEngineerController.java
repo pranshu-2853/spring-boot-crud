@@ -3,7 +3,7 @@ package com.learning;
 import org.springframework.web.bind.annotation.*;
 import com.learning.dto.SoftwareEngineerRequestDto;
 import com.learning.dto.SoftwareEngineerResponseDto;
-
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class SoftwareEngineerController {
 
     @PostMapping
     public SoftwareEngineerResponseDto addSoftwareEngineer(
-            @RequestBody SoftwareEngineerRequestDto dto) {
+            @Valid @RequestBody SoftwareEngineerRequestDto dto) {
 
         return softwareEngineerService.insertSoftwareEngineer(dto);
     }
@@ -47,7 +47,7 @@ public class SoftwareEngineerController {
     @PutMapping("/{id}")
     public SoftwareEngineerResponseDto updateSoftwareEngineerById(
             @PathVariable Integer id,
-            @RequestBody SoftwareEngineerRequestDto dto) {
+            @Valid @RequestBody SoftwareEngineerRequestDto dto) {
 
         return softwareEngineerService.updateSoftwareEngineerById(id, dto);
     }

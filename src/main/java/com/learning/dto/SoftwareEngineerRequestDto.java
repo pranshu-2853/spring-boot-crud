@@ -4,11 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 
 public class SoftwareEngineerRequestDto {
 
+    @NotBlank
     private String name;
-    private String techStack;
 
     @NotBlank
-    private String title;
+    private String techStack;
+
+
+
 
     public SoftwareEngineerRequestDto() {
     }

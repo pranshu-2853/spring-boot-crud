@@ -20,9 +20,12 @@ public class SoftwareEngineerController {
     }
 
     @GetMapping
-    public List<SoftwareEngineerResponseDto> getSoftwareEngineers() {
-        return softwareEngineerService.getSoftwareEngineers();
+    public ResponseEntity<List<SoftwareEngineerResponseDto>> getSoftwareEngineers() {
+        return ResponseEntity.ok(
+                softwareEngineerService.getSoftwareEngineers()
+        );
     }
+
 
 
     @GetMapping("/{id}")

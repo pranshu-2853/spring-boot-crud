@@ -1,5 +1,6 @@
 package com.learning;
 
+import com.learning.mapper.SoftwareEngineerMapper;
 import com.learning.exception.DuplicateResourceException;
 import com.learning.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -12,37 +13,24 @@ import java.util.List;
 @Service
 public class SoftwareEngineerService {
     private final SoftwareEngineerRepository softwareEngineerRepository;
+    private final SoftwareEngineerMapper mapper;
 
-    public SoftwareEngineerService(SoftwareEngineerRepository softwareEngineerRepository) {
+    public SoftwareEngineerService(
+            SoftwareEngineerRepository softwareEngineerRepository,
+            SoftwareEngineerMapper mapper) {
+
         this.softwareEngineerRepository = softwareEngineerRepository;
+        this.mapper = mapper;
     }
 
+    @Transactional(readOnly = true)
     public List<SoftwareEngineerResponseDto> getSoftwareEngineers() {
         return softwareEngineerRepository.findAll()
                 .stream()
-                .map(se -> new SoftwareEngineerResponseDto(
-                        se.getId(),
-                        se.getName(),
-                        se.getTechStack()
-                ))
+                .map(mapper::toResponseDto)
                 .toList();
     }
 
-
-    private SoftwareEngineer toEntity(SoftwareEngineerRequestDto dto) {
-        SoftwareEngineer entity = new SoftwareEngineer();
-        entity.setName(dto.getName());
-        entity.setTechStack(dto.getTechStack());
-        return entity;
-    }
-
-    private SoftwareEngineerResponseDto toResponseDto(SoftwareEngineer entity) {
-        return new SoftwareEngineerResponseDto(
-                entity.getId(),
-                entity.getName(),
-                entity.getTechStack()
-        );
-    }
 
 
 
@@ -59,13 +47,14 @@ public class SoftwareEngineerService {
             );
         }
 
-
-        SoftwareEngineer entity = toEntity(dto);
+        SoftwareEngineer entity = mapper.toEntity(dto);
         SoftwareEngineer saved = softwareEngineerRepository.save(entity);
-        return toResponseDto(saved);
+        return mapper.toResponseDto(saved);
     }
 
 
+
+    @Transactional(readOnly = true)
     public SoftwareEngineerResponseDto getSoftwareEngineersById(Integer id) {
 
         SoftwareEngineer entity = softwareEngineerRepository.findById(id)
@@ -75,8 +64,9 @@ public class SoftwareEngineerService {
                         )
                 );
 
-        return toResponseDto(entity);
+        return mapper.toResponseDto(entity);
     }
+
 
 
 
@@ -111,8 +101,9 @@ public class SoftwareEngineerService {
         entity.setTechStack(dto.getTechStack());
 
         SoftwareEngineer updated = softwareEngineerRepository.save(entity);
-        return toResponseDto(updated);
+        return mapper.toResponseDto(updated);
     }
+
 
 
 }

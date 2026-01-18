@@ -1,47 +1,23 @@
-### GET request to example server
-GET http://localhost:8080
+### =========================
+### SOFTWARE ENGINEER API
+### Base URL: http://localhost:8080/api/v1/software-engineer
+### =========================
 
-###
+
+### =========================
+### CREATE
+### =========================
+
+### Create - valid
 POST http://localhost:8080/api/v1/software-engineer
 Content-Type: application/json
 
 {
   "name": "Pranshu",
-  "techStack": "Java, Spring Boot"
+  "techStack": "Java"
 }
 
-###
-GET http://localhost:8080/api/v1/software-engineer
-
-
-###
-GET http://localhost:8080/api/v1/software-engineer/2
-
-
-###
-PUT http://localhost:8080/api/v1/software-engineer/1
-Content-Type: application/json
-
-
-{
-  "name": "Pranshu Patel",
-  "techStack": "Java, Spring Boot, Docker"
-}
-
-###
-DELETE http://localhost:8080/api/v1/software-engineer/7
-
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
-
-{
-  "name": "Pranshu",
-  "techStack": "Java, Spring Boot"
-}
-
-
-###
+### Create - validation error (blank name)
 POST http://localhost:8080/api/v1/software-engineer
 Content-Type: application/json
 
@@ -50,8 +26,7 @@ Content-Type: application/json
   "techStack": "Java"
 }
 
-
-###
+### Create - validation error (missing techStack)
 POST http://localhost:8080/api/v1/software-engineer
 Content-Type: application/json
 
@@ -60,47 +35,49 @@ Content-Type: application/json
 }
 
 
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
+### =========================
+### READ
+### =========================
 
-{
-  "name": "Pranshu",
-  "techStack": "Java"
-}
+### Get all
+GET http://localhost:8080/api/v1/software-engineer
 
+### Get by id - exists
+GET http://localhost:8080/api/v1/software-engineer/5
 
-###
+### Get by id - not exists
 GET http://localhost:8080/api/v1/software-engineer/999
 
 
-###
+### =========================
+### UPDATE
+### =========================
+
+### Update - exists
+PUT http://localhost:8080/api/v1/software-engineer/5
+Content-Type: application/json
+
+{
+  "name": "Pranshu Patel",
+  "techStack": "Java, Spring Boot, Docker"
+}
+
+### Update - not exists
 PUT http://localhost:8080/api/v1/software-engineer/999
 Content-Type: application/json
 
 {
   "name": "Test",
-  "techStack": "Java"
+  "techStack": "Java & Spring Boot"
 }
 
-###
+
+### =========================
+### DELETE
+### =========================
+
+### Delete - exists
+DELETE http://localhost:8080/api/v1/software-engineer/6
+
+### Delete - not exists
 DELETE http://localhost:8080/api/v1/software-engineer/999
-
-
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
-
-{
-  "name": "Pranshu",
-  "techStack": "Java"
-}
-
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
-
-{
-  "name": "Pranshu",
-  "techStack": "JS"
-}

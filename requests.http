@@ -105,3 +105,9 @@ Content-Type: application/json
   "techStack": "JS"
 }
 
+### Explicit pagination
+GET http://localhost:8080/api/v1/software-engineer?page=0&size=2
+
+### Next page
+GET http://localhost:8080/api/v1/software-engineer?page=1&size=2
+

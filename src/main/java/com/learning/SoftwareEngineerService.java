@@ -1,5 +1,7 @@
 package com.learning;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.learning.mapper.SoftwareEngineerMapper;
 import com.learning.exception.DuplicateResourceException;
 import com.learning.exception.ResourceNotFoundException;
@@ -31,7 +33,13 @@ public class SoftwareEngineerService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public Page<SoftwareEngineerResponseDto> getSoftwareEngineers(Pageable pageable) {
 
+        return softwareEngineerRepository
+                .findAll(pageable)
+                .map(mapper::toResponseDto);
+    }
 
 
     @Transactional

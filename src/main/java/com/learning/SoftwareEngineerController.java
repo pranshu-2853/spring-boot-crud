@@ -1,5 +1,7 @@
 package com.learning;
 
+import com.learning.dto.PaginatedResponse;
+import com.learning.mapper.PaginationMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,13 +25,18 @@ public class SoftwareEngineerController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<SoftwareEngineerResponseDto>> getSoftwareEngineers(
+    public ResponseEntity<PaginatedResponse<SoftwareEngineerResponseDto>> getSoftwareEngineers(
             @PageableDefault(page = 0, size = 5) Pageable pageable) {
 
-        return ResponseEntity.ok(
-                softwareEngineerService.getSoftwareEngineers(pageable)
-        );
+        Page<SoftwareEngineerResponseDto> page =
+                softwareEngineerService.getSoftwareEngineers(pageable);
+
+        PaginatedResponse<SoftwareEngineerResponseDto> response =
+                PaginationMapper.toPaginatedResponse(page);
+
+        return ResponseEntity.ok(response);
     }
+
 
 
 

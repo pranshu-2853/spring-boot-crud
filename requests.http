@@ -111,3 +111,12 @@ GET http://localhost:8080/api/v1/software-engineer?page=0&size=2
 ### Next page
 GET http://localhost:8080/api/v1/software-engineer?page=1&size=2
 
+###sort by id ascending
+GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=id,asc
+
+
+### sort by id descending
+GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=id,desc
+
+###multiple sorts
+GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=techStack,asc&sort=id,asc

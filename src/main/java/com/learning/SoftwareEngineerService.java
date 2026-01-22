@@ -2,6 +2,9 @@ package com.learning;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import com.learning.dto.SoftwareEngineerFilter;
+import com.learning.repository.specification.SoftwareEngineerSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import com.learning.mapper.SoftwareEngineerMapper;
 import com.learning.exception.DuplicateResourceException;
 import com.learning.exception.ResourceNotFoundException;
@@ -23,6 +26,19 @@ public class SoftwareEngineerService {
 
         this.softwareEngineerRepository = softwareEngineerRepository;
         this.mapper = mapper;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<SoftwareEngineerResponseDto> getSoftwareEngineers(
+            SoftwareEngineerFilter filter,
+            Pageable pageable) {
+
+        Specification<SoftwareEngineer> specification =
+                SoftwareEngineerSpecification.withFilter(filter);
+
+        return softwareEngineerRepository
+                .findAll(specification, pageable)
+                .map(mapper::toResponseDto);
     }
 
     @Transactional(readOnly = true)

@@ -1,9 +1,6 @@
 package com.learning;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -14,6 +11,9 @@ public class SoftwareEngineer {
     private Integer id;
     private String name;
     private String techStack;
+    @Column(nullable = false)
+    private boolean active = true;
+
 
     public SoftwareEngineer() {
     }
@@ -46,6 +46,14 @@ public class SoftwareEngineer {
 
     public void setTechStack(String techStack) {
         this.techStack = techStack;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

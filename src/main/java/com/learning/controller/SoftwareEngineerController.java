@@ -1,5 +1,6 @@
-package com.learning;
+package com.learning.controller;
 
+import com.learning.SoftwareEngineerService;
 import com.learning.dto.PaginatedResponse;
 import com.learning.mapper.PaginationMapper;
 import org.springframework.data.domain.Page;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import com.learning.dto.SoftwareEngineerRequestDto;
 import com.learning.dto.SoftwareEngineerResponseDto;
 import jakarta.validation.Valid;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/software-engineer")

@@ -1,6 +1,6 @@
 package com.learning.repository.specification;
 
-import com.learning.SoftwareEngineer;
+import com.learning.entity.SoftwareEngineer;
 import com.learning.dto.SoftwareEngineerFilter;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

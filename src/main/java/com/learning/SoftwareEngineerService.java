@@ -1,5 +1,6 @@
 package com.learning;
 
+import com.learning.entity.SoftwareEngineer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.learning.dto.SoftwareEngineerFilter;

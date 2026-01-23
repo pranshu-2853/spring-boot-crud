@@ -1,6 +1,6 @@
 package com.learning.mapper;
 
-import com.learning.SoftwareEngineer;
+import com.learning.entity.SoftwareEngineer;
 import com.learning.dto.SoftwareEngineerRequestDto;
 import com.learning.dto.SoftwareEngineerResponseDto;
 import org.springframework.stereotype.Component;

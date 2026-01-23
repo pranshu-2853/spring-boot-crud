@@ -1,5 +1,6 @@
-package com.learning;
+package com.learning.service;
 
+import com.learning.SoftwareEngineerRepository;
 import com.learning.entity.SoftwareEngineer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

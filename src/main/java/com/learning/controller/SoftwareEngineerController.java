@@ -1,6 +1,6 @@
 package com.learning.controller;
 
-import com.learning.SoftwareEngineerService;
+import com.learning.service.SoftwareEngineerService;
 import com.learning.dto.PaginatedResponse;
 import com.learning.mapper.PaginationMapper;
 import org.springframework.data.domain.Page;

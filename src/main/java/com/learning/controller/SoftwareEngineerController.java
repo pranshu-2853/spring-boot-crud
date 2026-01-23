@@ -1,13 +1,19 @@
-package com.learning;
+package com.learning.controller;
 
+import com.learning.service.SoftwareEngineerService;
+import com.learning.dto.PaginatedResponse;
+import com.learning.mapper.PaginationMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.learning.dto.SoftwareEngineerFilter;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.learning.dto.SoftwareEngineerRequestDto;
 import com.learning.dto.SoftwareEngineerResponseDto;
 import jakarta.validation.Valid;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/software-engineer")
@@ -20,9 +26,32 @@ public class SoftwareEngineerController {
     }
 
     @GetMapping
-    public List<SoftwareEngineerResponseDto> getSoftwareEngineers() {
-        return softwareEngineerService.getSoftwareEngineers();
+    public ResponseEntity<PaginatedResponse<SoftwareEngineerResponseDto>> getSoftwareEngineers(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String techStack,
+            @PageableDefault(
+                    page = 0,
+                    size = 5,
+                    sort = "id",
+                    direction = Sort.Direction.ASC
+            )
+            Pageable pageable) {
+
+        SoftwareEngineerFilter filter = new SoftwareEngineerFilter();
+        filter.setName(name);
+        filter.setTechStack(techStack);
+
+        Page<SoftwareEngineerResponseDto> page =
+                softwareEngineerService.getSoftwareEngineers(filter, pageable);
+
+        PaginatedResponse<SoftwareEngineerResponseDto> response =
+                PaginationMapper.toPaginatedResponse(page);
+
+        return ResponseEntity.ok(response);
     }
+
+
+
 
 
     @GetMapping("/{id}")

@@ -1,23 +1,47 @@
-### =========================
-### SOFTWARE ENGINEER API
-### Base URL: http://localhost:8080/api/v1/software-engineer
-### =========================
+### GET request to example server
+GET http://localhost:8080
 
-
-### =========================
-### CREATE
-### =========================
-
-### Create - valid
+###
 POST http://localhost:8080/api/v1/software-engineer
 Content-Type: application/json
 
 {
   "name": "Pranshu",
-  "techStack": "Java"
+  "techStack": "Java, Spring Boot"
 }
 
-### Create - validation error (blank name)
+###
+GET http://localhost:8080/api/v1/software-engineer
+
+
+###
+GET http://localhost:8080/api/v1/software-engineer/2
+
+
+###
+PUT http://localhost:8080/api/v1/software-engineer/4
+Content-Type: application/json
+
+
+{
+  "name": "Pranshu Patel",
+  "techStack": "Java, Spring Boot, Docker"
+}
+
+###
+DELETE http://localhost:8080/api/v1/software-engineer/7
+
+###
+POST http://localhost:8080/api/v1/software-engineer
+Content-Type: application/json
+
+{
+  "name": "Pranshu",
+  "techStack": "Java, Spring Boot"
+}
+
+
+###
 POST http://localhost:8080/api/v1/software-engineer
 Content-Type: application/json
 
@@ -26,7 +50,8 @@ Content-Type: application/json
   "techStack": "Java"
 }
 
-### Create - validation error (missing techStack)
+
+###
 POST http://localhost:8080/api/v1/software-engineer
 Content-Type: application/json
 
@@ -35,49 +60,93 @@ Content-Type: application/json
 }
 
 
-### =========================
-### READ
-### =========================
-
-### Get all
-GET http://localhost:8080/api/v1/software-engineer
-
-### Get by id - exists
-GET http://localhost:8080/api/v1/software-engineer/5
-
-### Get by id - not exists
-GET http://localhost:8080/api/v1/software-engineer/999
-
-
-### =========================
-### UPDATE
-### =========================
-
-### Update - exists
-PUT http://localhost:8080/api/v1/software-engineer/5
+###
+POST http://localhost:8080/api/v1/software-engineer
 Content-Type: application/json
 
 {
-  "name": "Pranshu Patel",
-  "techStack": "Java, Spring Boot, Docker"
+  "name": "Pranshu",
+  "techStack": "Java"
 }
 
-### Update - not exists
+
+###
+GET http://localhost:8080/api/v1/software-engineer/999
+
+
+###
 PUT http://localhost:8080/api/v1/software-engineer/999
 Content-Type: application/json
 
 {
   "name": "Test",
-  "techStack": "Java & Spring Boot"
+  "techStack": "Java"
 }
 
-
-### =========================
-### DELETE
-### =========================
-
-### Delete - exists
-DELETE http://localhost:8080/api/v1/software-engineer/6
-
-### Delete - not exists
+###
 DELETE http://localhost:8080/api/v1/software-engineer/999
+
+
+###
+POST http://localhost:8080/api/v1/software-engineer
+Content-Type: application/json
+
+{
+  "name": "Pranshu",
+  "techStack": "Java"
+}
+
+###
+POST http://localhost:8080/api/v1/software-engineer
+Content-Type: application/json
+
+{
+  "name": "Pranshu",
+  "techStack": "JS"
+}
+
+### Explicit pagination
+GET http://localhost:8080/api/v1/software-engineer?page=0&size=2
+
+### Next page
+GET http://localhost:8080/api/v1/software-engineer?page=1&size=2
+
+###sort by id ascending
+GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=id,asc
+
+
+### sort by id descending
+GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=id,desc
+
+###multiple sorts
+GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=techStack,asc&sort=id,asc
+
+###filtering,sorting,pagination tests Filtering works independently
+#
+#Filtering + pagination works together
+#
+#Sorting still works
+#
+#Pagination metadata unchanged
+
+GET http://localhost:8080//api/v1/software-engineer
+
+###
+GET http://localhost:8080//api/v1/software-engineer?name=an
+###
+GET http://localhost:8080//api/v1/software-engineer?techStack=java
+###
+GET http://localhost:8080//api/v1/software-engineer?name=an&techStack=java
+###
+GET http://localhost:8080//api/v1/software-engineer?page=1&size=3
+###
+GET http://localhost:8080//api/v1/software-engineer?sort=id,desc
+
+
+
+
+
+
+
+
+

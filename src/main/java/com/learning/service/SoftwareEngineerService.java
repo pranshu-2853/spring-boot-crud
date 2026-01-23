@@ -1,5 +1,13 @@
-package com.learning;
+package com.learning.service;
 
+import com.learning.repository.SoftwareEngineerRepository;
+import com.learning.entity.SoftwareEngineer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.learning.dto.SoftwareEngineerFilter;
+import com.learning.repository.specification.SoftwareEngineerSpecification;
+import org.springframework.data.jpa.domain.Specification;
+import com.learning.mapper.SoftwareEngineerMapper;
 import com.learning.exception.DuplicateResourceException;
 import com.learning.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -12,38 +20,44 @@ import java.util.List;
 @Service
 public class SoftwareEngineerService {
     private final SoftwareEngineerRepository softwareEngineerRepository;
+    private final SoftwareEngineerMapper mapper;
 
-    public SoftwareEngineerService(SoftwareEngineerRepository softwareEngineerRepository) {
+    public SoftwareEngineerService(
+            SoftwareEngineerRepository softwareEngineerRepository,
+            SoftwareEngineerMapper mapper) {
+
         this.softwareEngineerRepository = softwareEngineerRepository;
+        this.mapper = mapper;
     }
 
+    @Transactional(readOnly = true)
+    public Page<SoftwareEngineerResponseDto> getSoftwareEngineers(
+            SoftwareEngineerFilter filter,
+            Pageable pageable) {
+
+        Specification<SoftwareEngineer> specification =
+                SoftwareEngineerSpecification.withFilter(filter);
+
+        return softwareEngineerRepository
+                .findAll(specification, pageable)
+                .map(mapper::toResponseDto);
+    }
+
+    @Transactional(readOnly = true)
     public List<SoftwareEngineerResponseDto> getSoftwareEngineers() {
         return softwareEngineerRepository.findAll()
                 .stream()
-                .map(se -> new SoftwareEngineerResponseDto(
-                        se.getId(),
-                        se.getName(),
-                        se.getTechStack()
-                ))
+                .map(mapper::toResponseDto)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public Page<SoftwareEngineerResponseDto> getSoftwareEngineers(Pageable pageable) {
 
-    private SoftwareEngineer toEntity(SoftwareEngineerRequestDto dto) {
-        SoftwareEngineer entity = new SoftwareEngineer();
-        entity.setName(dto.getName());
-        entity.setTechStack(dto.getTechStack());
-        return entity;
+        return softwareEngineerRepository
+                .findAll(pageable)
+                .map(mapper::toResponseDto);
     }
-
-    private SoftwareEngineerResponseDto toResponseDto(SoftwareEngineer entity) {
-        return new SoftwareEngineerResponseDto(
-                entity.getId(),
-                entity.getName(),
-                entity.getTechStack()
-        );
-    }
-
 
 
     @Transactional
@@ -59,13 +73,14 @@ public class SoftwareEngineerService {
             );
         }
 
-
-        SoftwareEngineer entity = toEntity(dto);
+        SoftwareEngineer entity = mapper.toEntity(dto);
         SoftwareEngineer saved = softwareEngineerRepository.save(entity);
-        return toResponseDto(saved);
+        return mapper.toResponseDto(saved);
     }
 
 
+
+    @Transactional(readOnly = true)
     public SoftwareEngineerResponseDto getSoftwareEngineersById(Integer id) {
 
         SoftwareEngineer entity = softwareEngineerRepository.findById(id)
@@ -75,8 +90,9 @@ public class SoftwareEngineerService {
                         )
                 );
 
-        return toResponseDto(entity);
+        return mapper.toResponseDto(entity);
     }
+
 
 
 
@@ -111,8 +127,9 @@ public class SoftwareEngineerService {
         entity.setTechStack(dto.getTechStack());
 
         SoftwareEngineer updated = softwareEngineerRepository.save(entity);
-        return toResponseDto(updated);
+        return mapper.toResponseDto(updated);
     }
+
 
 
 }

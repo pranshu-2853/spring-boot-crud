@@ -172,10 +172,40 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuc2h1Iiwicm9sZXMiOiJST
 
 ### POST with USER token (should return 403)
 POST http://localhost:8080/api/v1/software-engineer
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuc2h1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NzEyNjA1NzEsImV4cCI6MTc3MTI2NDE3MX0.lgPiRFyix53XJgjNobYv10P3lf9AbcGPIR21dy3OJQY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuc2h1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NzEyNjYwNjksImV4cCI6MTc3MTI2OTY2OX0.CN6S1Hovhif4Zslpr5lQheRfJqVDCYG_aIbR71tWh3w
 Content-Type: application/json
 
 {
   "name": "Should Fail",
   "techStack": "Java"
+}
+
+###Test ADMIN
+###Register ADMIN:
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+"username": "admin1",
+"password": "1234",
+"role": "ROLE_ADMIN"
+}
+
+###Login admin
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "1234"
+}
+
+###POST with ADMIN token
+POST http://localhost:8080/api/v1/software-engineer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEiLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NzEyNjUzODMsImV4cCI6MTc3MTI2ODk4M30.gXm9LqtV8T-sCSux-YgH157dIRQSNFD0PMb5-wUj7gg
+Content-Type: application/json
+
+{
+  "name": "Admin Engineer",
+  "techStack": "Spring Boot"
 }

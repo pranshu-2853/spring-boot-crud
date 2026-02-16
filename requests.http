@@ -166,7 +166,16 @@ Content-Type: application/json
   "password": "1234"
 }
 
+###Request With JWT Token with token example ,its valid for  1 hour
+GET http://localhost:8080/api/v1/software-engineer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuc2h1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NzEyNjA1NzEsImV4cCI6MTc3MTI2NDE3MX0.lgPiRFyix53XJgjNobYv10P3lf9AbcGPIR21dy3OJQY
 
+### POST with USER token (should return 403)
+POST http://localhost:8080/api/v1/software-engineer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuc2h1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NzEyNjA1NzEsImV4cCI6MTc3MTI2NDE3MX0.lgPiRFyix53XJgjNobYv10P3lf9AbcGPIR21dy3OJQY
+Content-Type: application/json
 
-
-
+{
+  "name": "Should Fail",
+  "techStack": "Java"
+}

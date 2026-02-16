@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import com.learning.dto.SoftwareEngineerRequestDto;
 import com.learning.dto.SoftwareEngineerResponseDto;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 
 @RestController
 @RequestMapping("api/v1/software-engineer")
@@ -26,6 +28,7 @@ public class SoftwareEngineerController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PaginatedResponse<SoftwareEngineerResponseDto>> getSoftwareEngineers(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String techStack,
@@ -50,19 +53,16 @@ public class SoftwareEngineerController {
         return ResponseEntity.ok(response);
     }
 
-
-
-
-
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public SoftwareEngineerResponseDto getSoftwareEngineerById(
             @PathVariable Integer id) {
 
         return softwareEngineerService.getSoftwareEngineersById(id);
     }
 
-
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SoftwareEngineerResponseDto> addSoftwareEngineer(
             @Valid @RequestBody SoftwareEngineerRequestDto dto) {
 
@@ -74,22 +74,19 @@ public class SoftwareEngineerController {
                 .body(response);
     }
 
-
-
-
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSoftwareEngineerById(@PathVariable Integer id) {
         softwareEngineerService.deleteSoftwareEngineerById(id);
     }
 
-
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public SoftwareEngineerResponseDto updateSoftwareEngineerById(
             @PathVariable Integer id,
             @Valid @RequestBody SoftwareEngineerRequestDto dto) {
 
         return softwareEngineerService.updateSoftwareEngineerById(id, dto);
     }
-
 }

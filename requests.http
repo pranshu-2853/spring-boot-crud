@@ -1,7 +1,11 @@
-### GET request to example server
+############################################################
+###################### BASIC CRUD TESTS ####################
+############################################################
+
+### Health Check
 GET http://localhost:8080
 
-###
+### Create Engineer (No Security – for early phase testing)
 POST http://localhost:8080/api/v1/software-engineer
 Content-Type: application/json
 
@@ -10,202 +14,112 @@ Content-Type: application/json
   "techStack": "Java, Spring Boot"
 }
 
-###
+### Get All Engineers
 GET http://localhost:8080/api/v1/software-engineer
 
-
-###
+### Get Engineer By ID
 GET http://localhost:8080/api/v1/software-engineer/2
 
-
-###
+### Update Engineer
 PUT http://localhost:8080/api/v1/software-engineer/4
 Content-Type: application/json
-
 
 {
   "name": "Pranshu Patel",
   "techStack": "Java, Spring Boot, Docker"
 }
 
-###
+### Delete Engineer
 DELETE http://localhost:8080/api/v1/software-engineer/7
 
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
 
-{
-  "name": "Pranshu",
-  "techStack": "Java, Spring Boot"
-}
+############################################################
+################ PAGINATION & FILTER TESTS #################
+############################################################
 
-
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
-
-{
-  "name": "",
-  "techStack": "Java"
-}
-
-
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
-
-{
-  "name": "Pranshu"
-}
-
-
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
-
-{
-  "name": "Pranshu",
-  "techStack": "Java"
-}
-
-
-###
-GET http://localhost:8080/api/v1/software-engineer/999
-
-
-###
-PUT http://localhost:8080/api/v1/software-engineer/999
-Content-Type: application/json
-
-{
-  "name": "Test",
-  "techStack": "Java"
-}
-
-###
-DELETE http://localhost:8080/api/v1/software-engineer/999
-
-
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
-
-{
-  "name": "Pranshu",
-  "techStack": "Java"
-}
-
-###
-POST http://localhost:8080/api/v1/software-engineer
-Content-Type: application/json
-
-{
-  "name": "Pranshu",
-  "techStack": "JS"
-}
-
-### Explicit pagination
+### Explicit Pagination
 GET http://localhost:8080/api/v1/software-engineer?page=0&size=2
 
-### Next page
-GET http://localhost:8080/api/v1/software-engineer?page=1&size=2
-
-###sort by id ascending
+### Sorting
 GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=id,asc
-
-
-### sort by id descending
 GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=id,desc
 
-###multiple sorts
-GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=techStack,asc&sort=id,asc
-
-###filtering,sorting,pagination tests Filtering works independently
-#
-#Filtering + pagination works together
-#
-#Sorting still works
-#
-#Pagination metadata unchanged
-
-GET http://localhost:8080//api/v1/software-engineer
-
-###
-GET http://localhost:8080//api/v1/software-engineer?name=an
-###
-GET http://localhost:8080//api/v1/software-engineer?techStack=java
-###
-GET http://localhost:8080//api/v1/software-engineer?name=an&techStack=java
-###
-GET http://localhost:8080//api/v1/software-engineer?page=1&size=3
-###
-GET http://localhost:8080//api/v1/software-engineer?sort=id,desc
+### Filtering
+GET http://localhost:8080/api/v1/software-engineer?name=an
+GET http://localhost:8080/api/v1/software-engineer?techStack=java
+GET http://localhost:8080/api/v1/software-engineer?name=an&techStack=java
 
 
-### For Security test requests
+############################################################
+#################### SECURITY PHASE TESTS ##################
+############################################################
 
-### Register User
+################ PUBLIC ENDPOINTS ################
+
+### Register USER
 POST http://localhost:8080/auth/register
 Content-Type: application/json
 
 {
-  "username": "pranshu",
+  "username": "user_phase2",
   "password": "1234",
   "role": "ROLE_USER"
 }
 
-
-
-### Login Request
-POST http://localhost:8080/auth/login
-Content-Type: application/json
-
-{
-  "username": "pranshu",
-  "password": "1234"
-}
-
-###Request With JWT Token with token example ,its valid for  1 hour
-GET http://localhost:8080/api/v1/software-engineer
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuc2h1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NzEyNjA1NzEsImV4cCI6MTc3MTI2NDE3MX0.lgPiRFyix53XJgjNobYv10P3lf9AbcGPIR21dy3OJQY
-
-### POST with USER token (should return 403)
-POST http://localhost:8080/api/v1/software-engineer
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuc2h1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NzEyNjYwNjksImV4cCI6MTc3MTI2OTY2OX0.CN6S1Hovhif4Zslpr5lQheRfJqVDCYG_aIbR71tWh3w
-Content-Type: application/json
-
-{
-  "name": "Should Fail",
-  "techStack": "Java"
-}
-
-###Test ADMIN
-###Register ADMIN:
+### Register ADMIN
 POST http://localhost:8080/auth/register
 Content-Type: application/json
 
 {
-"username": "admin1",
-"password": "1234",
-"role": "ROLE_ADMIN"
+  "username": "admin_phase2",
+  "password": "1234",
+  "role": "ROLE_ADMIN"
 }
 
-###Login admin
+### Login USER
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "username": "admin1",
+  "username": "user_phase2",
   "password": "1234"
 }
 
-###POST with ADMIN token
-POST http://localhost:8080/api/v1/software-engineer
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEiLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NzEyNjUzODMsImV4cCI6MTc3MTI2ODk4M30.gXm9LqtV8T-sCSux-YgH157dIRQSNFD0PMb5-wUj7gg
+### Login ADMIN
+POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "name": "Admin Engineer",
+  "username": "admin_phase2",
+  "password": "1234"
+}
+
+
+################ PROTECTED ENDPOINT TESTS ################
+
+### USER → GET (Allowed)
+GET http://localhost:8080/api/v1/software-engineer
+Authorization: Bearer <USER_TOKEN>
+
+### USER → POST (Should Return 403)
+POST http://localhost:8080/api/v1/software-engineer
+Authorization: Bearer <USER_TOKEN>
+Content-Type: application/json
+
+{
+  "name": "User Attempt",
+  "techStack": "Java"
+}
+
+### ADMIN → POST (Should Return 201)
+POST http://localhost:8080/api/v1/software-engineer
+Authorization: Bearer <ADMIN_TOKEN>
+Content-Type: application/json
+
+{
+  "name": "Admin Success",
   "techStack": "Spring Boot"
 }
+
+### No Token → Should Return 401
+GET http://localhost:8080/api/v1/software-engineer

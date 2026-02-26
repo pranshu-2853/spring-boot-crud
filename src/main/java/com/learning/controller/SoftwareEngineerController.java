@@ -15,6 +15,10 @@ import com.learning.dto.SoftwareEngineerRequestDto;
 import com.learning.dto.SoftwareEngineerResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springdoc.core.annotations.ParameterObject;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 
 @RestController
@@ -27,11 +31,23 @@ public class SoftwareEngineerController {
         this.softwareEngineerService = softwareEngineerService;
     }
 
+
+
+    @Operation(
+            summary = "Get all software engineers with optional filtering and pagination",
+            description = "Accessible by USER and ADMIN roles. Supports name and techStack filtering."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - JWT missing or invalid"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient role")
+    })
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PaginatedResponse<SoftwareEngineerResponseDto>> getSoftwareEngineers(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String techStack,
+            @ParameterObject
             @PageableDefault(
                     page = 0,
                     size = 5,
@@ -53,6 +69,15 @@ public class SoftwareEngineerController {
         return ResponseEntity.ok(response);
     }
 
+
+
+    @Operation(summary = "Get software engineer by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Engineer retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Engineer not found"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden")
+    })
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public SoftwareEngineerResponseDto getSoftwareEngineerById(
@@ -61,6 +86,15 @@ public class SoftwareEngineerController {
         return softwareEngineerService.getSoftwareEngineersById(id);
     }
 
+
+
+    @Operation(summary = "Create a new software engineer (ADMIN only)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Engineer created successfully"),
+            @ApiResponse(responseCode = "400", description = "Validation failed"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - ADMIN role required")
+    })
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SoftwareEngineerResponseDto> addSoftwareEngineer(
@@ -74,6 +108,16 @@ public class SoftwareEngineerController {
                 .body(response);
     }
 
+
+
+
+    @Operation(summary = "Delete a software engineer by ID (ADMIN only)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Engineer deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Engineer not found"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - ADMIN role required")
+    })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -81,6 +125,17 @@ public class SoftwareEngineerController {
         softwareEngineerService.deleteSoftwareEngineerById(id);
     }
 
+
+
+
+    @Operation(summary = "Update an existing software engineer by ID (ADMIN only)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Engineer updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Validation failed"),
+            @ApiResponse(responseCode = "404", description = "Engineer not found"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - ADMIN role required")
+    })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public SoftwareEngineerResponseDto updateSoftwareEngineerById(

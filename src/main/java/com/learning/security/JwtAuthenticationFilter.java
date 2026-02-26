@@ -47,8 +47,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Check if header exists and starts with Bearer
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7); // remove "Bearer "
-            username = jwtService.extractUsername(jwt);
+            jwt = authHeader.substring(7);
+            try {
+                username = jwtService.extractUsername(jwt);
+                System.out.println("Extracted username: " + username);
+            } catch (Exception e) {
+                System.out.println("JWT Parsing Error: " + e.getMessage());
+            }
         }
 
         // If username found and no authentication already set

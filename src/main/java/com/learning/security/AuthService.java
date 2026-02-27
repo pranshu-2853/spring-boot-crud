@@ -1,5 +1,6 @@
 package com.learning.security;
 
+import com.learning.exception.UsernameAlreadyExistsException;
 import com.learning.security.dto.AuthResponse;
 import com.learning.security.dto.LoginRequest;
 import com.learning.security.dto.RegisterRequest;
@@ -30,7 +31,7 @@ public class AuthService {
     public void register(RegisterRequest request) {
 
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
+            throw new UsernameAlreadyExistsException("Username already exists");
         }
 
         User user = new User(

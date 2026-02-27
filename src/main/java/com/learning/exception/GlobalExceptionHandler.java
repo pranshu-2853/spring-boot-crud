@@ -54,13 +54,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGenericException(Exception ex) {
 
-        logger.error("Unexpected server error", ex);
+
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<String> handleUsernameExists(
+            UsernameAlreadyExistsException ex) {
+
+        logger.warn("Registration failed: {}", ex.getMessage());
 
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Internal Server Error");
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
     }
 }

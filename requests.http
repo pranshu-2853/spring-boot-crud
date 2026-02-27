@@ -128,3 +128,14 @@ GET http://localhost:8080/api/v1/software-engineer
 ### TEST JWT MANUALLY
 GET http://localhost:8080/api/v1/software-engineer
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdHJpbmciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlhdCI6MTc3MjEzMDk1OSwiZXhwIjoxNzcyMTM0NTU5fQ.BjQJ4NfZZr3_aro7SnylZv3mZC9RKasqMQFt4-GpWvE
+
+
+### CREATE ENGINEER (ADMIN)
+POST http://localhost:8080/api/v1/software-engineer
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbl9waGFzZTIiLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NzIxOTc4NzQsImV4cCI6MTc3MjIwMTQ3NH0.d398TAMtoKfe4DbAXK5KuJPhl22R2HbHK3s16DKkcmw
+
+{
+  "name": "L",
+  "techStack": "Java"
+}

@@ -1,109 +1,67 @@
+@host = http://localhost:8080
+@userToken = REPLACE_WITH_USER_TOKEN
+@adminToken = REPLACE_WITH_ADMIN_TOKEN
+
 ############################################################
-###################### BASIC CRUD TESTS ####################
+###################### PUBLIC ENDPOINTS ####################
 ############################################################
 
-### Health Check
-GET http://localhost:8080
+### OpenAPI docs should be public (200)
+GET {{host}}/v3/api-docs
 
-### Create Engineer (No Security – for early phase testing)
-POST http://localhost:8080/api/v1/software-engineer
+### Register USER (200 or 409 if already exists)
+POST {{host}}/auth/register
 Content-Type: application/json
 
 {
-  "name": "Pranshu",
-  "techStack": "Java, Spring Boot"
-}
-
-### Get All Engineers
-GET http://localhost:8080/api/v1/software-engineer
-
-### Get Engineer By ID
-GET http://localhost:8080/api/v1/software-engineer/2
-
-### Update Engineer
-PUT http://localhost:8080/api/v1/software-engineer/4
-Content-Type: application/json
-
-{
-  "name": "Pranshu Patel",
-  "techStack": "Java, Spring Boot, Docker"
-}
-
-### Delete Engineer
-DELETE http://localhost:8080/api/v1/software-engineer/7
-
-
-############################################################
-################ PAGINATION & FILTER TESTS #################
-############################################################
-
-### Explicit Pagination
-GET http://localhost:8080/api/v1/software-engineer?page=0&size=2
-
-### Sorting
-GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=id,asc
-GET http://localhost:8080/api/v1/software-engineer?page=0&size=5&sort=id,desc
-
-### Filtering
-GET http://localhost:8080/api/v1/software-engineer?name=an
-GET http://localhost:8080/api/v1/software-engineer?techStack=java
-GET http://localhost:8080/api/v1/software-engineer?name=an&techStack=java
-
-
-############################################################
-#################### SECURITY PHASE TESTS ##################
-############################################################
-
-################ PUBLIC ENDPOINTS ################
-
-### Register USER
-POST http://localhost:8080/auth/register
-Content-Type: application/json
-
-{
-  "username": "user_phase2",
+  "username": "user_test",
   "password": "1234",
   "role": "ROLE_USER"
 }
 
-### Register ADMIN
-POST http://localhost:8080/auth/register
+### Register ADMIN (200 or 409 if already exists)
+POST {{host}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "admin_phase2",
+  "username": "admin_test",
   "password": "1234",
   "role": "ROLE_ADMIN"
 }
 
-### Login USER
-POST http://localhost:8080/auth/login
+### Login USER (200, copy token into @userToken)
+POST {{host}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "user_phase2",
+  "username": "user_test",
   "password": "1234"
 }
 
-### Login ADMIN
-POST http://localhost:8080/auth/login
+### Login ADMIN (200, copy token into @adminToken)
+POST {{host}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "admin_phase2",
+  "username": "admin_test",
   "password": "1234"
 }
 
 
-################ PROTECTED ENDPOINT TESTS ################
+############################################################
+##################### AUTHZ BEHAVIOR #######################
+############################################################
 
-### USER → GET (Allowed)
-GET http://localhost:8080/api/v1/software-engineer
-Authorization: Bearer <USER_TOKEN>
+### No token -> 401
+GET {{host}}/api/v1/software-engineer
 
-### USER → POST (Should Return 403)
-POST http://localhost:8080/api/v1/software-engineer
-Authorization: Bearer <USER_TOKEN>
+### USER can GET -> 200
+GET {{host}}/api/v1/software-engineer
+Authorization: Bearer <token>
+
+### USER cannot POST -> 403
+POST {{host}}/api/v1/software-engineer
+Authorization: Bearer <token>
 Content-Type: application/json
 
 {
@@ -111,31 +69,68 @@ Content-Type: application/json
   "techStack": "Java"
 }
 
-### ADMIN → POST (Should Return 201)
-POST http://localhost:8080/api/v1/software-engineer
-Authorization: Bearer <ADMIN_TOKEN>
+### ADMIN can POST -> 201
+POST {{host}}/api/v1/software-engineer
+Authorization: Bearer <token>
 Content-Type: application/json
 
 {
-  "name": "Admin Success",
-  "techStack": "Spring Boot"
+  "name": "Admin Success1",
+  "techStack": "Spring Boot11"
 }
 
-### No Token → Should Return 401
-GET http://localhost:8080/api/v1/software-engineer
 
+############################################################
+##################### PROTECTED CRUD #######################
+############################################################
 
-### TEST JWT MANUALLY
-GET http://localhost:8080/api/v1/software-engineer
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdHJpbmciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlhdCI6MTc3MjEzMDk1OSwiZXhwIjoxNzcyMTM0NTU5fQ.BjQJ4NfZZr3_aro7SnylZv3mZC9RKasqMQFt4-GpWvE
+### Get all engineers with admin token
+GET {{host}}/api/v1/software-engineer
+Authorization: Bearer <token>
 
+### Get by id (change id as needed)
+GET {{host}}/api/v1/software-engineer/4
+Authorization: Bearer <token>
 
-### CREATE ENGINEER (ADMIN)
-POST http://localhost:8080/api/v1/software-engineer
+### Update engineer by id (ADMIN only)
+PUT {{host}}/api/v1/software-engineer/4
+Authorization: Bearer <token>
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbl9waGFzZTIiLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NzIxOTc4NzQsImV4cCI6MTc3MjIwMTQ3NH0.d398TAMtoKfe4DbAXK5KuJPhl22R2HbHK3s16DKkcmw
 
 {
-  "name": "L",
-  "techStack": "Java"
+  "name": "Updated Name",
+  "techStack": "Java, Spring Boot, Docker"
 }
+
+### Delete engineer by id (ADMIN only)
+DELETE {{host}}/api/v1/software-engineer/4
+Authorization: Bearer <token>
+
+
+############################################################
+############### PAGINATION + FILTER + SORT #################
+############################################################
+
+### Pagination default sort(id,asc)
+GET {{host}}/api/v1/software-engineer?page=0&size=5
+Authorization: Bearer <token>
+
+### Explicit sort asc
+GET {{host}}/api/v1/software-engineer?page=0&size=5&sort=id,asc
+Authorization: Bearer <token>
+
+### Explicit sort desc
+GET {{host}}/api/v1/software-engineer?page=0&size=5&sort=id,desc
+Authorization: Bearer <token>
+
+### Filter by name
+GET {{host}}/api/v1/software-engineer?name=an
+Authorization: Bearer <token>
+
+### Filter by tech stack
+GET {{host}}/api/v1/software-engineer?techStack=java
+Authorization: Bearer <token>
+
+### Combined filters
+GET {{host}}/api/v1/software-engineer?name=an&techStack=java
+Authorization: Bearer <token>

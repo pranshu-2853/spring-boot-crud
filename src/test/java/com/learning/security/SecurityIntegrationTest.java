@@ -39,7 +39,7 @@ class SecurityIntegrationTest {
     private JwtService jwtService;
 
     @MockBean
-    private org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @MockBean
     private SoftwareEngineerService softwareEngineerService;

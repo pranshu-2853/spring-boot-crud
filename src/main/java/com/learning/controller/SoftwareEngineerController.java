@@ -31,7 +31,10 @@ public class SoftwareEngineerController {
         this.softwareEngineerService = softwareEngineerService;
     }
 
-
+    @GetMapping("/")
+    public String home() {
+        return "API is live 🚀";
+    }
 
     @Operation(
             summary = "Get all software engineers with optional filtering and pagination",

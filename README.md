@@ -15,7 +15,7 @@ https://secure-engineer-management-api.onrender.com
 https://secure-engineer-management-api.onrender.com/swagger-ui/index.html
 
 💡 Note:
-This is a secured backend API. Use Swagger UI to test endpoints.
+This is a secured backend API. Use Swagger UI to test endpoints.Free-tier deployment may take ~30 seconds to wake up on first request.
 
 ---
 
